@@ -1,0 +1,26 @@
+{
+  "version": "0.1.0",
+  "screens": {
+    "home": {
+      "components": [
+        { "type": "IdeaList", "props": { "sortBy": "updatedAt", "sortOrder": "desc", "showMaturityBadge": true, "maxPreviewLength": 50 } },
+        { "type": "FAB", "props": { "position": "bottom-right", "icon": "plus" } },
+        { "type": "EmptyState", "props": { "message": "Start with a dot.", "showAnimation": true } }
+      ]
+    },
+    "chat": {
+      "components": [
+        { "type": "MaturityProgress", "props": { "position": "top" } },
+        { "type": "ChatBubble", "props": { "userColor": "#007AFF", "assistantColor": "#E5E5EA" } },
+        { "type": "MessageInput", "props": { "placeholder": "Refine your idea...", "disableWhileLoading": true } }
+      ]
+    },
+    "specCard": {
+      "components": [
+        { "type": "SparkOrigin", "props": { "highlighted": true } },
+        { "type": "SpecField", "props": { "fields": ["problem", "audience", "solution", "successMetrics", "effortEstimate", "uniqueness"], "emptyText": "Not yet defined" } },
+        { "type": "ShareButton", "props": { "format": "markdown" } }
+      ]
+    }
+  }
+}

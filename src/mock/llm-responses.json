@@ -1,0 +1,9 @@
+{
+  "dot_turn_0": "Interesting spark! What real-world problem does this idea solve? Who faces this problem?",
+  "dot_turn_2": "I see. Who suffers from this problem the most? Can you define your target audience?",
+  "line_turn_4": "Audience is clear. Now let's make your solution concrete — how exactly will you solve this problem?",
+  "line_turn_6": "Solution is taking shape. How will you measure success? What metrics prove your idea works?",
+  "paragraph_turn_8": "Great metrics. What is the key differentiator that sets this idea apart from similar ones?",
+  "paragraph_turn_10": "Your idea is now a complete spec! Can you estimate the effort? (S/M/L/XL)",
+  "fallback": "Can you elaborate on that? More detail will help us refine your idea further."
+}
