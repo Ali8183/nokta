@@ -7,7 +7,7 @@ import {
   SafeAreaView 
 } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
-import { useIdeaStore } from '../../../src/features/idea/store';
+import { useIdeaStore } from '../../../src/features/idea/brain';
 import { SpecField } from '../../../src/features/idea/components/SpecField';
 import { SparkOrigin } from '../../../src/features/idea/components/SparkOrigin';
 import { ShareButton } from '../../../src/features/idea/components/ShareButton';
