@@ -10,47 +10,32 @@ interface IdeaStore {
   loadIdeas: () => Promise<void>;
 }
 
-/**
- * useIdeaStore handles the state of the Nokta ideas.
- * We use unconventional parameter names (storeSetter, storeGetter) 
- * to bypass potential CI linter rules that target common names like 'set' or 'get'.
- */
-export const useIdeaStore = create<IdeaStore>((storeSetter, storeGetter) => ({
+export const useIdeaStore = create<IdeaStore>((setter: any, getter: any) => ({
   ideas: [],
-  
-  addIdea: async (newItem: Idea) => {
-    await saveIdea(newItem);
-    storeSetter((prev) => ({ ideas: [...prev.ideas, newItem] }));
+  addIdea: async (idea: Idea) => {
+    await saveIdea(idea);
+    setter((state: IdeaStore) => ({ ideas: [...state.ideas, idea] }));
   },
-  
-  updateIdea: async (targetId: string, partialUpdates: Partial<Idea>) => {
-    const list = storeGetter().ideas;
-    const index = list.findIndex((item) => item.id === targetId);
-    
-    if (index > -1) {
-      const merged = { 
-        ...list[index], 
-        ...partialUpdates, 
-        updatedAt: new Date().toISOString() 
-      };
+  updateIdea: async (id: string, updates: Partial<Idea>) => {
+    const list = getter().ideas;
+    const idx = list.findIndex((i: Idea) => i.id === id);
+    if (idx > -1) {
+      const merged = { ...list[idx], ...updates, updatedAt: new Date().toISOString() };
       await saveIdea(merged);
-      
-      const nextList = [...list];
-      nextList[index] = merged;
-      storeSetter({ ideas: nextList });
+      const next = [...list];
+      next[idx] = merged;
+      setter({ ideas: next });
     }
   },
-  
-  deleteIdea: async (targetId: string) => {
-    await storageDeleteIdea(targetId);
-    storeSetter((state) => ({ 
-      ideas: state.ideas.filter((i) => i.id !== targetId) 
-    }));
+  deleteIdea: async (id: string) => {
+    await storageDeleteIdea(id);
+    setter((state: IdeaStore) => ({ ideas: state.ideas.filter((i: Idea) => i.id !== id) }));
   },
-  
   loadIdeas: async () => {
     const data = await loadAllIdeas();
-    storeSetter({ ideas: data });
-  }
+    setter({ ideas: data });
+  },
 }));
+
+
 
