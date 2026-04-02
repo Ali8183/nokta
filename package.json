@@ -19,13 +19,17 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-native": "0.81.5",
+    "react-native-safe-area-context": "5.7.0",
+    "react-native-screens": "4.24.0",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
+    "@react-native/babel-preset": "^0.81.5",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^30.0.0",
     "@types/react": "~19.1.0",
     "babel-preset-expo": "^55.0.13",
+    "eslint": "^9.0.0",
     "eslint-config-expo": "^55.0.0",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react-native": "^5.0.0",
