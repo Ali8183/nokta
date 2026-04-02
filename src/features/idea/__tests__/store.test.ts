@@ -28,7 +28,7 @@ jest.mock('../services/storage', () => ({
   deleteIdea: jest.fn(),
 }));
 
-import { useIdeaStore } from '../brain';
+import { useIdeaStore } from '../store';
 import { saveIdea, deleteIdea } from '../services/storage';
 
 describe('useIdeaStore', () => {

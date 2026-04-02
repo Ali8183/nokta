@@ -8,7 +8,7 @@ import {
   Text 
 } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
-import { useIdeaStore } from '../../src/features/idea/brain';
+import { useIdeaStore } from '../../src/features/idea/store';
 import { getNextQuestion } from '../../src/services/llm';
 import { ChatBubble } from '../../src/features/idea/components/ChatBubble';
 import { MessageInput } from '../../src/features/idea/components/MessageInput';

@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useIdeaStore } from '../src/features/idea/brain';
+import { useIdeaStore } from '../src/features/idea/store';
 import { IdeaCard } from '../src/features/idea/components/IdeaCard';
 import { EmptyState } from '../src/features/idea/components/EmptyState';
 import { FAB } from '../src/features/idea/components/FAB';
