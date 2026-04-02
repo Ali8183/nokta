@@ -1,0 +1,51 @@
+title: "GENERIC SPEC"
+description: "Checklist for all specs/*.md Nokta feature spec files"
+# Applies to the entire file content (not a specific section)
+file_pattern: "## 1. IDENTITY"
+min_words: 200
+checks:
+  - id: identity_section
+    description: "## 1. IDENTITY section present"
+    pattern: "## 1\\. IDENTITY"
+    weight: 20
+
+  - id: non_goals_min
+    description: "At least 5 non-goal items listed"
+    min_list_items: 5
+    weight: 15
+
+  - id: non_goals_section
+    description: "## 2. NON-GOALS section present"
+    pattern: "## 2\\. NON-GOALS"
+    weight: 5
+
+  - id: data_contracts_section
+    description: "## 3. DATA CONTRACTS section present"
+    pattern: "## 3\\. DATA CONTRACTS"
+    weight: 15
+
+  - id: typescript_blocks
+    description: "At least one TypeScript code block in DATA CONTRACTS"
+    pattern: "```(ts|typescript)"
+    weight: 10
+
+  - id: objective_function_section
+    description: "## 4. OBJECTIVE FUNCTION section present"
+    pattern: "## 4\\. OBJECTIVE FUNCTION"
+    weight: 15
+
+  - id: scalar_metric
+    description: "Scalar metric or formula defined (metric/pass rate/score)"
+    pattern: "(metric|pass rate|pass_rate|formula|score|kpi|measure)"
+    weight: 10
+
+  - id: ratchet_rule_section
+    description: "## 5. RATCHET RULE section present"
+    pattern: "## 5\\. RATCHET RULE"
+    weight: 5
+
+  - id: no_todos_remaining
+    description: "No > TODO: placeholders left in file"
+    pattern: "> TODO"
+    inverted: true
+    weight: 5

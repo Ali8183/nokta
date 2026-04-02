@@ -1,0 +1,138 @@
+name: "Nokta Spec Ratchet"
+
+# Triggered only when files inside specs/ change.
+# program.md changes are handled by md-ratchet.yml — these are independent.
+
+on:
+  pull_request:
+    paths:
+      - "specs/**/*.md"
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  spec-score:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main-branch
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Detect changed spec files
+        id: changed_specs
+        run: |
+          # List specs/*.md files changed in this PR
+          CHANGED=$(git diff --name-only origin/main...HEAD -- 'specs/*.md' | tr '\n' ' ')
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          echo "Changed spec files: $CHANGED"
+
+      - name: Score specs and check ratchet
+        id: spec_check
+        run: |
+          REGRESSION=false
+          REPORT="# 🗂️ Nokta Spec Ratchet Score\n\n"
+          REPORT+="| Spec File | Score | Main Baseline | Delta | Status |\n"
+          REPORT+="|-----------|-------|---------------|-------|--------|\n"
+
+          for SPEC_FILE in ${{ steps.changed_specs.outputs.files }}; do
+            if [ ! -f "$SPEC_FILE" ]; then
+              echo "Skipping $SPEC_FILE (not found in PR branch)"
+              continue
+            fi
+
+            # Score on PR branch
+            PR_SCORE=$(python scripts/section_score.py --spec-file "$SPEC_FILE" 2>/dev/null \
+              | grep "Score:" | grep -oP '\d+' | head -1 || echo "0")
+
+            # Check if file exists on main branch
+            MAIN_SPEC="main-branch/$SPEC_FILE"
+            if [ -f "$MAIN_SPEC" ]; then
+              # File exists on main → ratchet applies
+              MAIN_SCORE=$(cd main-branch && python scripts/section_score.py --spec-file "$SPEC_FILE" 2>/dev/null \
+                | grep "Score:" | grep -oP '\d+' | head -1 || echo "0")
+              IS_NEW="false"
+            else
+              # New spec file → first-merge, no baseline yet
+              MAIN_SCORE=0
+              IS_NEW="true"
+            fi
+
+            DELTA=$((PR_SCORE - MAIN_SCORE))
+
+            if [ "$IS_NEW" = "true" ]; then
+              STATUS="🆕 FIRST MERGE"
+              BASELINE_LABEL="(new)"
+            elif [ "$PR_SCORE" -ge "$MAIN_SCORE" ]; then
+              STATUS="✅ PASS"
+              BASELINE_LABEL="$MAIN_SCORE"
+            else
+              STATUS="❌ REGRESSION"
+              BASELINE_LABEL="$MAIN_SCORE"
+              REGRESSION=true
+              echo "⚠️  REGRESSION: $SPEC_FILE — main=$MAIN_SCORE, PR=$PR_SCORE"
+            fi
+
+            REPORT+="| \`$SPEC_FILE\` | **$PR_SCORE** | $BASELINE_LABEL | ${DELTA:+$DELTA} | $STATUS |\n"
+
+            # Generate per-file detail report
+            DETAIL=$(python scripts/section_score.py --spec-file "$SPEC_FILE" 2>/dev/null || echo "Scoring failed")
+            REPORT+="\n<details><summary>Details: $SPEC_FILE</summary>\n\n\`\`\`\n$DETAIL\n\`\`\`\n\n</details>\n\n"
+          done
+
+          if [ "$REGRESSION" = "true" ]; then
+            REPORT+="\n## ❌ REJECTED — Spec score regression detected. Fix and push again."
+          else
+            REPORT+="\n## ✅ ELIGIBLE FOR MERGE — All spec scores maintained or improved."
+          fi
+
+          echo -e "$REPORT" > /tmp/spec_score_report.md
+          echo "regression=$REGRESSION" >> $GITHUB_OUTPUT
+
+      - name: Post score comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: /tmp/spec_score_report.md
+          header: spec-ratchet
+
+      - name: Gate decision
+        run: |
+          if [ "${{ steps.spec_check.outputs.regression }}" = "true" ]; then
+            echo "❌ REJECTED: Spec score regression detected."
+            exit 1
+          else
+            echo "✅ PASSED: No regressions. Eligible for merge."
+          fi
+
+  auto-merge:
+    needs: spec-score
+    runs-on: ubuntu-latest
+    if: success()
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Enable auto-merge
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash

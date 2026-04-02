@@ -1,0 +1,30 @@
+section: 5
+title: "SCREEN & FEATURE SPEC"
+file_pattern: "## 5. SCREEN & FEATURE SPEC"
+min_words: 150
+checks:
+  - id: screen_descriptions
+    description: "Description paragraph present for each screen"
+    pattern: "(Screen|Home|List|Chat|Spec Card)"
+    min_occurrences: 3
+    weight: 20
+  - id: navigation
+    description: "Navigation flow specified"
+    pattern: "(navigate|navigation|router|screen.*→.*screen|→)"
+    weight: 15
+  - id: component_list
+    description: "Component list present for each screen"
+    pattern: "(component|FlatList|TextInput|Card|Button)"
+    weight: 15
+  - id: maturity_indicator
+    description: "Maturity indicator behavior defined"
+    pattern: "(maturity|dot.*line|indicator|progress)"
+    weight: 15
+  - id: user_journey
+    description: "User journey defined"
+    pattern: "(journey|flow|create.*answer.*view)"
+    weight: 20
+  - id: acceptance_criteria
+    description: "Acceptance criteria present for each screen"
+    pattern: "(accept|criteria|GIVEN|WHEN|THEN|must|should)"
+    weight: 15

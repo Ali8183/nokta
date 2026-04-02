@@ -1,0 +1,25 @@
+section: 1
+title: "IDENTITY"
+file_pattern: "## 1. IDENTITY"
+min_words: 50
+checks:
+  - id: mission_statement
+    description: "Single-paragraph mission statement present (max 50 words)"
+    pattern: "."
+    max_first_paragraph_words: 50
+    weight: 25
+
+  - id: target_user
+    description: "Target user defined"
+    pattern: "(user|target|founder|student|researcher)"
+    weight: 25
+
+  - id: not_statement
+    description: "What Nokta is NOT statement present"
+    pattern: "(NOT|is not)"
+    weight: 25
+
+  - id: metaphor
+    description: "Metaphor explained (dot → line → paragraph → page)"
+    pattern: "(dot|line|paragraph|page)"
+    weight: 25

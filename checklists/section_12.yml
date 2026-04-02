@@ -1,0 +1,25 @@
+section: 12
+title: "TESTING PHILOSOPHY"
+file_pattern: "## 12. TESTING PHILOSOPHY"
+min_words: 80
+checks:
+  - id: valid_test_def
+    description: "Valid test definition present"
+    pattern: "(valid.*test|behavior)"
+    weight: 20
+  - id: anti_patterns
+    description: "Anti-pattern list present"
+    pattern: "(anti.?pattern|snapshot.*spam|expect.*true|mock.*everything|DON'T)"
+    weight: 25
+  - id: min_test_per_feature
+    description: "Minimum number of tests per new feature specified"
+    pattern: "(minimum|at least|\\d+.*test)"
+    weight: 20
+  - id: golden_flows
+    description: "Golden flow tests defined"
+    pattern: "(golden|critical.*path|create.*answer)"
+    weight: 20
+  - id: test_location
+    description: "Test file location rule present"
+    pattern: "(__tests__|co.?locate|test.*file|spec\\.)"
+    weight: 15

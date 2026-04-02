@@ -1,0 +1,29 @@
+section: 2
+title: "SETUP PROTOCOL"
+file_pattern: "## 2. SETUP PROTOCOL"
+min_words: 80
+checks:
+  - id: node_version
+    description: "Node/npm version requirements specified"
+    pattern: "(node|npm|v[0-9]+)"
+    weight: 15
+  - id: expo_init
+    description: "Expo init command or equivalent present"
+    pattern: "(npx create-expo|expo init|npx expo)"
+    weight: 20
+  - id: folder_structure
+    description: "Folder structure tree shown"
+    pattern: "(├|└|src/|app/|components/)"
+    weight: 20
+  - id: dependency_list
+    description: "Dependency list present"
+    pattern: "(dependencies|install|package)"
+    weight: 15
+  - id: verify_command
+    description: "Verification test command present"
+    pattern: "(npm test|npm run|yarn test|npx jest)"
+    weight: 15
+  - id: time_estimate
+    description: "Note that setup completes in under 5 minutes"
+    pattern: "(minut|dakika|5 min|quick)"
+    weight: 15

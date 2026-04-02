@@ -1,0 +1,30 @@
+section: 7
+title: "LLM CONTRACT"
+file_pattern: "## 7. LLM CONTRACT"
+min_words: 120
+checks:
+  - id: mock_format
+    description: "Mock LLM response format defined (JSON)"
+    pattern: "```(json|JSON)"
+    weight: 15
+  - id: golden_transcripts
+    description: "At least 3 golden idea transcripts present"
+    min_occurrences_pattern: "(transcript|example|Golden|Scenario)"
+    min_occurrences: 3
+    weight: 20
+  - id: prompt_template
+    description: "Prompt template present"
+    pattern: "(system prompt|template|You are)"
+    weight: 20
+  - id: mock_mode
+    description: "No API calls made in mock mode"
+    pattern: "(mock|MOCK|mock.*mode|API.*call.*no)"
+    weight: 15
+  - id: env_flag
+    description: "Strategy for switching to live LLM at runtime"
+    pattern: "(env|ENV|USE_MOCK|LIVE|environment|flag)"
+    weight: 15
+  - id: rate_limit
+    description: "Rate limit / fallback behavior defined"
+    pattern: "(rate.*limit|fallback|timeout|retry)"
+    weight: 15

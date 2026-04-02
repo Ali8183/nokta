@@ -1,0 +1,25 @@
+section: 11
+title: "ARCHITECTURAL INVARIANTS"
+file_pattern: "## 11. ARCHITECTURAL INVARIANTS"
+min_words: 60
+checks:
+  - id: state_management
+    description: "State management rule present"
+    pattern: "(state|Context|Redux|Zustand|useState)"
+    weight: 25
+  - id: component_boundaries
+    description: "Component boundaries defined"
+    pattern: "(src/features|boundary|folder)"
+    weight: 20
+  - id: no_global_mutable
+    description: "Global mutable state prohibition stated"
+    pattern: "(global|mutable|forbid|never|ban)"
+    weight: 20
+  - id: service_layer
+    description: "API/LLM calls must go through a single service layer"
+    pattern: "(service|layer|api.*call)"
+    weight: 20
+  - id: naming_convention
+    description: "File/folder naming convention present"
+    pattern: "(naming|convention|camelCase|kebab|PascalCase)"
+    weight: 15
